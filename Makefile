@@ -4,6 +4,7 @@ include .env
 
 BUNDLE_ID := com.tylercaselli.mailto-link-maker
 APP_NAME := Mailto Link Maker
+DMG_NAME := Mailto_Link_Maker
 
 freeze:
 	pip freeze > requirements.txt
@@ -43,3 +44,15 @@ staple:
 
 validate:
 	xcrun stapler validate "dist/$(APP_NAME).app" && spctl -a -vvv -t install "dist/$(APP_NAME).app"
+
+dmg:
+	codesign --deep --force --verify --verbose \
+	--options runtime \
+	--sign "Developer ID Application: $(DEV_ID)" \
+	"$(DMG_NAME).dmg"
+	xcrun notarytool submit "$(DMG_NAME).dmg" \
+	--apple-id "$(APPLE_ID)" \
+	--team-id "$(TEAM_ID)" \
+	--password "$(APP_PW)" \
+	--wait
+	xcrun stapler staple "$(DMG_NAME).dmg"
