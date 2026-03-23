@@ -21,7 +21,7 @@ build:
 	main.py
 
 clean:
-	rm -rf *.spec dist build *.zip
+	rm -rf *.spec dist build *.zip *.dmg
 
 sign:
 	codesign --deep --force --verify --verbose \
